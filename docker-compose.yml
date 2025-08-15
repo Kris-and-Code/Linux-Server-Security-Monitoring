@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  linux-security-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linux-security-monitoring
+    hostname: security-server
+    ports:
+      - "2222:22"      # SSH
+      - "8080:80"      # HTTP
+      - "8443:443"     # HTTPS
+      - "61208:61208"  # Glances web interface
+    volumes:
+      - ./data:/data
+      - ./logs:/var/log
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    privileged: true  # Required for systemd services
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+      - /var/lib
+      - /var/lib/systemd
+      - /var/run
+    command: ["/lib/systemd/systemd"]
+    healthcheck:
+      test: ["CMD", "systemctl", "is-active", "ssh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  default:
+    name: linux-security-network

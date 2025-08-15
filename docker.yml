@@ -1,0 +1,11 @@
+FROM ubuntu:22.04
+
+RUN apt update && apt install -y \
+    ufw openssh-server sudo vim htop glances systemd systemd-sysv
+
+# Create a non-root admin user
+RUN useradd -m -s /bin/bash admin && \
+    echo "admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+EXPOSE 22 80 443
+CMD ["/usr/sbin/sshd", "-D"]
