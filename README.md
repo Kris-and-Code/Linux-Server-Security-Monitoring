@@ -117,5 +117,4 @@ This project is for educational and demonstration purposes.
 
 ---
 
-**⚠️ Important**: This project is designed for learning and demonstration. Do not use in production without proper security review and customization for your specific environment.
-# Linux-Server-Security-Monitoring
+
